@@ -7,3 +7,4 @@
 ***
 ### Algoribrary's Owner
 > Daioooor36
+> Please DM you ask something to.
