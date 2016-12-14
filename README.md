@@ -1,2 +1,2 @@
 # Algoribrary
-## We Looking for Creatively Solving Root(CSR)
+## We Looking for Creatively Solving Route(CSR)
