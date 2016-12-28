@@ -7,28 +7,28 @@ public class source01
 	public static void main(String[] args)
 	{
 		Scanner in = new Scanner(System.in);
-		
-		System.out.println("10Áø¼ö->16Áø¼ö º¯È¯ ÇÁ·Î±×·¥ÀÌ´Ù");
-		System.out.println("10Áø¼ö¸¦ 16Áø¼ö·Î ¹Ù²Ù·Á¸é AÅ°¸¦ ´©¸£°í,");
-		System.out.println("16Áø¼ö¸¦ 10Áø¼ö·Î ¹Ù²Ù·Á¸é BÅ°¸¦ ´©¸£¼¼¿ä.");
-		
-		System.out.println("A³ª B¸¦ ´©¸£¼¼¿ä : ");		
+
+		System.out.println("10ì§„ìˆ˜->16ì§„ìˆ˜ ë³€í™˜ í”„ë¡œê·¸ëž¨ì´ë‹¤");
+		System.out.println("10ì§„ìˆ˜ë¥¼ 16ì§„ìˆ˜ë¡œ ë°”ê¾¸ë ¤ë©´ Aí‚¤ë¥¼ ëˆ„ë¥´ê³ ,");
+		System.out.println("16ì§„ìˆ˜ë¥¼ 10ì§„ìˆ˜ë¡œ ë°”ê¾¸ë ¤ë©´ Bí‚¤ë¥¼ ëˆ„ë¥´ì„¸ìš”.");
+
+		System.out.println("Aë‚˜ Bë¥¼ ëˆ„ë¥´ì„¸ìš” : ");		
 		String input = in.next().toUpperCase();
-		
-		System.out.println("º¯È¯ÇÒ ¼ýÀÚ¸¦ ÀÔ·ÂÇÏ¼¼¿ä : ");
+
+		System.out.println("ë³€í™˜í•  ìˆ«ìžë¥¼ ìž…ë ¥í•˜ì„¸ìš” : ");
 		int num = in.nextInt();
-		
+
 		if(input.equals("A"))
 		{
-			System.out.printf("10Áø¼ö °ª : %d --> 16Áø¼ö °ª : %x", num, num);
+			System.out.printf("10ì§„ìˆ˜ ê°’ : %d --> 16ì§„ìˆ˜ ê°’ : %x", num, num);
 		}
 		else if(input.equals("B"))
 		{
-			System.out.printf("16Áø¼ö °ª : %x --> 10Áø¼ö °ª : %d", num, num);
+			System.out.printf("16ì§„ìˆ˜ ê°’ : %x --> 10ì§„ìˆ˜ ê°’ : %d", num, num);
 		}
 		else
 		{
-			System.out.println("A¿Í BÅ°¸¸ »ç¿ëÇØ¾ß ÇÑ´Ù.");
+			System.out.println("Aì™€ Bí‚¤ë§Œ ì‚¬ìš©í•´ì•¼ í•œë‹¤.");
 		}
 	}
 }
