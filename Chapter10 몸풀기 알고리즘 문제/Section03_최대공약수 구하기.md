@@ -55,9 +55,11 @@ public class source02
 		System.out.print("입력2 : ");
 		int num_2 = in.nextInt();
 
-		int max_num = (num_1 > num_2) ? num_1 : num_2;
+		// 가장 작은 값을 기준으로 한다.
+		int min_num = (num_1 < num_2) ? num_1 : num_2;
 
-		for(int i=1 ; i<=max_num ; i++)
+		// 공약수는 1부터 둘 중 작은 값까지만 계산하면 된다.
+		for(int i=1 ; i<=min_num ; i++)
 		{
 			if( num_1%i==0 && num_2%i==0 )
 			{
@@ -71,8 +73,8 @@ public class source02
 
 <hr/>
 
-### [Solution]
-#### 2.3 임의의 두 숫자에 공통으로 해당하는 약수 중 최댓값을 선택하는 방법
+### Source code [Java]
+#### 임의의 두 숫자에 공통으로 해당하는 약수 중 최댓값을 선택하는 방법
 
 ```java
 import java.util.Scanner;
@@ -83,15 +85,17 @@ public class source01
 	{		
 		Scanner in = new Scanner(System.in);
 
-		System.out.println("공약수를 구할 두 정숫값을 입력하세요");
+		System.out.println("최대공약수를 구할 두 정숫값을 입력하세요");
 		System.out.print("입력1 : ");
 		int num_1 = in.nextInt();
 		System.out.print("입력2 : ");
 		int num_2 = in.nextInt();
 
-		int max_num = (num_1 > num_2) ? num_1 : num_2;
+		// 가장 작은 값을 기준으로 한다.
+		int min_num = (num_1 < num_2) ? num_1 : num_2;
 
-		for(int i=max_num ; i>=1 ; i--)
+		// 높은 값부터 검사하여 첫번 째 공약수를 출력한다.
+		for(int i=min_num ; i>=1 ; i--)
 		{
 			if( num_1%i==0 && num_2%i==0 )
 			{
