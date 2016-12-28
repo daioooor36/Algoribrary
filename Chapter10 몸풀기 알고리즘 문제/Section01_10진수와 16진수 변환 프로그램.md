@@ -1,3 +1,6 @@
+#### 10진수와 16진수 사이를 변환해주는 프로그램
+
+##### Java Code
 ```java
 
 import java.util.Scanner;
@@ -13,14 +16,14 @@ public class source01
 		System.out.println("16진수를 10진수로 바꾸려면 B키를 누르세요.");
 
 		System.out.println("A나 B를 누르세요 : ");		
-		String input = in.next().toUpperCase();
+		String input = in.next().toUpperCase(); // 대문자 변환
 
 		System.out.println("변환할 숫자를 입력하세요 : ");
 		int num = in.nextInt();
 
 		if(input.equals("A"))
 		{
-			System.out.printf("10진수 값 : %d --> 16진수 값 : %x", num, num);
+			System.out.printf("10진수 값 : %d --> 16진수 값 : %x", num, num); // %d:10진수, %x:16진수
 		}
 		else if(input.equals("B"))
 		{
