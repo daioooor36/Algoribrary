@@ -1,8 +1,17 @@
 #### 10진수와 16진수 사이를 변환해주는 프로그램
-
-##### Java Code
+<br>
+##### Section01 실행 결과
+```
+10진수->16진수 변환 프로그램이다
+10진수를 16진수로 바꾸려면 [A] 키를 누르고,
+16진수를 10진수로 바꾸려면 [B] 키를 누르세요.
+A나 B를 누르세요 : B
+변환할 숫자를 입력하세요 : ff
+16진수 값 : ff --> 10진수 값 : 25
+```
+<br>
+##### Source code [Java]
 ```java
-
 import java.util.Scanner;
 
 public class source01
