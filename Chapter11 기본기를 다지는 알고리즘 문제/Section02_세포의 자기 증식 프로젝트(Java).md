@@ -4,23 +4,28 @@
 줄기 세포는 자기 증식 기능이 있다. 자기 증식을 하는 알파 세포는 총 5개의 DNA가 있고 아래와 같은 방식으로 증식을 한다.
 
 아래는 DNA 3에만 DNA 정보가 있고 다른 DNA들에는 정보가 없는 경우이다.
+<hr/>
 
 ![Alt text](http://cfile222.uf.daum.net/image/23337E415864AC6E0C1708 "그림 11-6")
 <br>
 (1) DNA 3에 정보가 존재한다.
 
+<br>
 ![Alt text](http://cfile220.uf.daum.net/image/2534C3415864AC6F0B8074 "그림 11-7")
 <br>
 (2) 증식 하면 DNA 3에 있는 정보가 DNA 2와 DNA 4로 분할되고, DNA 3의 정보는 사라진다.(이후반복)
 
+<br>
 ![Alt text](http://cfile229.uf.daum.net/image/271EE5415864AC6F1E7E62 "그림 11-8")
 <br>
 (3) DNA 2와 DNA 4에 있던 정보가 다시 분할해서 DNA 2의 정보는 DNA 1과 DNA 3으로, DNA 4의 정보는 DNA 3과 DNA 5로 나눠진다. DNA 3은 2개의 정보를 갖는다.
 
+<br>
 ![Alt text](http://cfile239.uf.daum.net/image/2110D7415864AC6F2DC55D "그림 11-9")
 <br>
 (4) DNA 3에 있는 2개의 정보가 DNA 2와 DNA 4로 분할된다. 그런데 DNA 1은 분할하는 경우 오름쪽에 있는 DNA 2에 하나를 저장하고, 자기 자신에도 하나를 저장하는 특징을 갖는다. 또한, DNA 5는 분할할 경우 하나를 버린다.
 
+<br>
 ![Alt text](http://cfile225.uf.daum.net/image/26074F415864AC6F35B4BC "그림 11-10")
 <br>
 (5) 1~4의 과정을 요약하면 이런 식이다.
