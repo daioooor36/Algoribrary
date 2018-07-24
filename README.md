@@ -2,13 +2,13 @@ Algoribrary
 ===========
 
 ***
-1. We Looking for Creatively Solving Route.
+1. I'm Looking for Creatively Solving Route.
 2. Seek clearly simple code.
-3. And sharing that gorgeous code.
+3. And sharing that code.
 
 ***
 
 ### Algoribrary's Owner
 > Daioooor36
 
-> Please DM you ask something to.
+> Please Message you ask something to.
