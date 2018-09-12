@@ -1,0 +1,50 @@
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+
+		int cacheSize = scan.nextInt();
+		String[] cities = scan.next().split(","); // 단어단위로 스플릿
+		int len = cities.length;
+		
+    // 링크드리스트 선언
+		List<String> cache = new LinkedList<String>();
+		int cost = 0;
+	
+		for(int i=0; i<len; i++) {
+      // 초기 캐시 채우기(그러나 캐시채우는중에 캐시 히트할 가능성 있음 보완필요 18.09.12)
+			if(i<cacheSize) {
+				cache.add(0, cities[i]);
+				cost += 5;
+				continue;
+			}
+			
+      // 캐시 히트하면 순서 변경
+			boolean isChg = false;
+			for(int j=0; j<cacheSize; j++) {
+				if(cache.get(j).equals(cities[i])) {
+					cache.remove(j);
+					cache.add(0, cities[i]);
+					isChg = true;
+					cost += 1;
+				}
+			}
+			
+      // 캐시 미히트 시, 밀어내기
+			if(cacheSize > 0 && isChg == false) {
+				cache.remove(cacheSize-1);
+				cache.add(0, cities[i]);
+				cost += 5;
+				continue;
+			}
+			
+      // 캐시공간 0일때 단순비용증가
+			cost += 5;
+		}
+		
+		System.out.println(cost);
+	}
+}
