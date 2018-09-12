@@ -43,7 +43,7 @@ public class Main {
 				strResult = "0"+strResult; // 앞단 공백 0으로 채움
 			
 			for(int j=0; j<n; j++) {
-				if(strResult.charAt(j) == '1') // 1이면 # 0이면 
+				if(strResult.charAt(j) == '1') // 1이면 # 0이면 공백
 					System.out.print("#");
 				else
 					System.out.print(" ");
