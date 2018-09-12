@@ -1,0 +1,88 @@
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Main {
+	private static Pattern p = null;
+    private static Matcher m = null;
+    private static final String PATTERN = "\\d+(S|D|T)+(\\*|#)?";
+    private static final int GAMES = 3;
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		String data = scan.next(); // 점수|보너스|[옵션] 3세트 1S2D*3T
+		
+		String[] devided = new String[GAMES];
+		searchPtrn(devided, data); // 정규식에 일치하는 부분으로 분할		
+		scoreCalculate(devided); // 최종계산
+	}
+	
+	// 정규식 기반 분할
+	public static void searchPtrn(String[] str, String originStr) {
+		p = Pattern.compile(PATTERN);
+		m = p.matcher(originStr);
+        
+        for(int i=0; i<GAMES; i++) {
+			m.find();
+			str[i] = originStr.substring(m.start(), m.end());
+			System.out.println(str[i]);
+		}	
+	}
+	
+	// 산정 메소드
+	public static void scoreCalculate(String[] game) {
+	    String option = " SDT*#"; // 자릿수기반 제곱수 산정 용
+	    int[] score = new int [GAMES]; // 각 게임 별 배열
+	    int point, pow, times; // 점수, 보너스, 옵션
+	    
+		for(int i=0 ; i<GAMES; i++) {
+			// 초기화
+			point = 0;
+			pow   = 0;
+			times = 1;
+			
+			// 점수 추출
+			p = Pattern.compile("^[0-9]+");
+			m = p.matcher(game[i]);
+			m.find();
+			String a = m.group();
+
+			// 보너스 추출
+			p = Pattern.compile("(S|D|T)+");
+			m = p.matcher(game[i]);
+			m.find();
+			String b = m.group();
+
+			// 옵션 추출
+			p = Pattern.compile("(\\*|#)?$");
+			m = p.matcher(game[i]);
+			m.find();
+			String c = m.group();
+			
+			point = Integer.parseInt(a);
+			pow   = option.indexOf(b);
+			
+			// 옵션이 있을 경우 계산
+			if(c.isEmpty() == false) {
+				int val = option.indexOf(c);
+				switch(val) {
+					case 4:
+						times = 2;
+						if(i >= 1)
+							score[i-1] *= 2;
+						break;
+					case 5:
+						times = -1;
+						break;
+				}
+			}
+			score[i] = (int) (Math.pow(point, pow) * times);			
+		}
+		
+		int result = 0;
+		for(int i=0 ; i<GAMES; i++)
+			result += score[i];
+		
+		System.out.print(result);
+	}
+}
