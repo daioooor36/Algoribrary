@@ -8,6 +8,7 @@ public class Main {
 		int n = scan.nextInt(); // 사각형의 길이 n
 		scan.nextLine(); // flush
 		
+		/* 대괄호까지 포함해서 입력될 것으로 보이지않지만 정확하게 하기 위해 대괄호 입력을 전제로 풀이 함 */
 		String tmp1 = scan.nextLine(); // arr1 정수배열
 		String tmp2 = scan.nextLine(); // arr1 정수배열
 		tmp1 = tmp1.substring(1, tmp1.length() - 1); // 앞뒤 [] 제거
@@ -24,23 +25,25 @@ public class Main {
 		checkProcess(n, arr1, arr2);
 	}
 	
+	// String -> Int 형변환
 	public static void toIntArray(int n, int[] arr, String[] tmp) {
 		for(int i=0; i<n; i++) {
 			arr[i] = Integer.parseInt(tmp[i]);
 		}
 	}
 	
+	// 풀이 메소드
 	public static void checkProcess(int n, int[] arr1, int[] arr2) {
 		System.out.print("[\"");		
 		for(int i=0; i<n; i++) {
-			int result = arr1[i] | arr2[i];
-			String strResult = Integer.toBinaryString(result);
+			int result = arr1[i] | arr2[i]; // 비트연산 수행
+			String strResult = Integer.toBinaryString(result); // 2진수 숫자 String형으로 반환
 			
 			for(int z=0; z<n-strResult.length(); z++)
-				strResult = "0"+strResult;
+				strResult = "0"+strResult; // 앞단 공백 0으로 채움
 			
 			for(int j=0; j<n; j++) {
-				if(strResult.charAt(j) == '1')
+				if(strResult.charAt(j) == '1') // 1이면 # 0이면 
 					System.out.print("#");
 				else
 					System.out.print(" ");
