@@ -1,0 +1,129 @@
+/*
+//정리
+
+1. 입력배열(크루)들을 정렬.
+2. 2차원배열에 넣음
+3. 맨뒤 배열부터 같은시간내 한도잇으면 콘 넣음
+
+*콘은 같은시각 중 맨 뒤에 선다.
+*모든 크루는 23:59에 다시 돌아간다
+*셔틀은 09:00부터 다닌다
+
+n = 운행 횟수(1~10)
+t = 운행 간격(1~60)
+m = 최대 승차인원(1~45)
+
+크루도착시간은 00:01 ~ 23:59
+크루는 1~2000명 도착함
+*/
+
+import java.util.Scanner;
+
+public class Main {
+    private static String INPUT2 = "08:00 08:01 08:02 08:03";
+    //private static String INPUT2 = "09:10 09:09 08:00";
+    //private static String INPUT2 = "09:00 09:00 09:00 09:00";
+    //private static String INPUT2 = "00:01 00:01 00:01 00:01 00:01";
+    //private static String INPUT2 = "23:59";
+    //private static String INPUT2 = "23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59 23:59";
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		int N = scan.nextInt();
+		int T = scan.nextInt();
+		int M = scan.nextInt();
+		
+		String[] crew = INPUT2.split(" ");
+		int[] crewTime = new int [crew.length];
+		for(int i=0; i<crew.length; i++) {
+			crew[i] = crew[i].substring(0, 2) + crew[i].substring(3);
+			crewTime[i] = Integer.parseInt(crew[i]);			
+		}
+		
+		// 1명 이상일때만 정렬 함.
+		if(crewTime.length > 1)
+			insertionSort(crewTime);
+		
+		int[][] timeTable = new int[N][M+1];
+		int time = 900; // 현재 시각
+		int cnt = 0;	// 탑승 승객 수
+		
+		// 운행 회차
+		for(int i=0; i<N; i++, time = convertTime(time, T)) {
+			// 버스시간 계산 후, [0]에 대입	
+			timeTable[i][0] = time;
+			
+			// 탑승 가능승객
+			for(int j=1; j<M+1; j++) {				
+				// 버스시간 이전에 도착한 승객들만 태움
+				if(crewTime[cnt] <= timeTable[i][0]) {
+					timeTable[i][j] = crewTime[cnt++];
+					
+					if(cnt >= crewTime.length)
+						break;
+				}
+			}
+			
+			if(cnt == crewTime.length)
+				break;
+		}
+				
+		int result = 0;
+
+		// 마지막 타임에 승객이 꽉찼으면 마지막 탑승자 시간보다 1분 더 먼저와야 함 
+		if(timeTable[N-1][M] > 0) {
+			int lastTime = 0;
+			for(int i=1; i<M+1; i++) {
+				if(lastTime < timeTable[N-1][i])
+					lastTime = timeTable[N-1][i];
+			}
+			result = convertTime(lastTime, -1);
+		}
+		else // 여유승객이 있는 시간대를 찾았다면 그 시간대 버스시간에 맞춰도착.
+			result = timeTable[N-1][0];
+		
+		printTime(result);
+		
+	}
+	
+	// 시간형식으로 계산
+	public static int convertTime(int valTime, int num) {	
+		valTime += num;
+		
+		if(num > 0) {
+			if((valTime % 100) / 59 == 1)
+				valTime += 40;
+		}
+		else {
+			if((valTime % 100) / 59 == 1)
+				valTime -= 40;
+		}
+		
+		return valTime;
+	}
+	
+	// 시간형태로 출력
+	public static void printTime(int valTime) {
+		String strTime1 = Integer.toString(valTime / 100);
+		String strTime2 = Integer.toString(valTime % 100);
+		strTime1 = strTime1.length() == 1 ? "0"+strTime1 : strTime1;
+		strTime2 = strTime2.length() == 1 ? "0"+strTime2 : strTime2;
+		System.out.println(strTime1 + ":" + strTime2);
+	}
+	
+	// 삽입 정렬
+	public static void insertionSort(int[] arr) {
+		int len = arr.length;
+		
+		for(int i=1; i<len; i++) {
+			int temp = arr[i];
+			int j=i-1;
+			
+			while(j>=0 && temp<arr[j]) {
+				arr[j+1] = arr[j];
+				j--;
+			}
+			arr[j+1] = temp;
+		}
+	}
+}
