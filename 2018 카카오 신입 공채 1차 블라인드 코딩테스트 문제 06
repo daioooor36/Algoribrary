@@ -1,0 +1,184 @@
+import java.util.Scanner;
+
+// 완벽하게 돌아가지 않음. 재풀이 필요
+/*
+	높이 m
+	폭 n
+	판 = [m][n]
+	
+	C C B D E
+	A A A D E
+	A A A B F
+	C C B B F
+	
+	T T T A N T
+	R R F A C C
+	R R R F C C
+	T R R R A A
+	T T M M M F
+	T M M T T J
+*/
+
+public class Main {
+	//private static String BOARD = "CCBDE AAADE AAABF CCBBF";
+	private static String BOARD = "TTTANT RRFACC RRRFCC TRRRAA TTMMMF TMMTTJ";
+	static Scanner scan = new Scanner(System.in);
+	static int M = scan.nextInt();
+	static int N = scan.nextInt();
+	static int X;
+	static int Y;
+	
+	public static void main(String[] args) {
+		
+		String[][] game = new String[M][N];
+		String[] tmp = BOARD.split(" ");
+		
+		for(int i=0; i<M; i++) {
+			for(int j=0; j<N; j++) {
+				game[i][j] = tmp[i].substring(j, j+1);
+			}
+		}
+		
+		checker(game);
+		//printArr(game);
+	}
+	
+	public static void checker(String[][] game) {		
+		for(int i=0; i<M; i++) {
+			for(int j=0; j<N; j++) {
+				if(game[i][j].equals("#")) continue;
+				
+				String[][] tmp = new String[M][N];
+				init(tmp);
+				tmp[i][j] = "#";
+				if(roundSeeker(game, tmp, i, j)) {
+					printArr(tmp);
+					sorter(game,tmp);
+
+					printArr(game);
+					checker(game);
+				}
+			}
+		}
+	}
+	
+	public static void sorter(String[][] game, String[][] tmp) {
+		for(int i=M-1; i>=0; i--) {
+			for(int j=0; j<N; j++) {
+				int row = 0;
+				while(tmp[i-row][j].equals("#")) {					
+					if(i==row) {
+						break;
+					}
+					row++;
+					
+					if(tmp[i-row][j].equals("#")) 
+						game[i-row][j] = "#";					
+					else {
+						game[i][j] = game[i-row][j];
+						game[i-row][j] = "#";
+						tmp[i-row][j] = "#";						
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	public static boolean roundSeeker(String[][] game, String[][] tmp, int a, int b) {
+		System.out.println(a + ", "+b);
+		X = a;
+		Y = b;
+		if(downSeeker(game, tmp, X, Y)) {
+			System.out.println("X:"+X + ", Y:"+Y);
+			if(rightSeeker(game, tmp, X, Y)) {
+				System.out.println("X:"+X + ", Y:"+Y);
+				if(upSeeker(game, tmp, X, Y)) {
+					System.out.println("X:"+X + ", Y:"+Y);
+					if(leftSeeker(game, tmp, X, Y)) {
+						System.out.println("X:"+X + ", Y:"+Y);
+						if(a==X & b==Y) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	public static boolean downSeeker(String[][] game, String[][] tmp, int a, int b) {
+		if(a+1 == M) return false; // 재귀상태에서 맨 아랫줄 
+		
+		// 아랫칸과 값이 동일하면 #칠하고 또 아랫칸 탐색
+		if(game[a][b].equals(game[a+1][b])) {
+			tmp[a+1][b] = "#";
+			downSeeker(game, tmp, ++X, Y);
+			return true;
+		}
+		
+		// 맨 처음 false가 아 재귀상황에서 false는 상관없음
+		return false;
+	}
+	
+	private static boolean rightSeeker(String[][] game, String[][] tmp, int a, int b) {
+		if(b+1 == N) return false; // 재귀상태에서 맨 오른쪽 줄 
+		
+		// 오른쪽 칸과 값이 동일하면 #칠하고 또 오른쪽 칸 탐색
+		if(game[a][b].equals(game[a][b+1])) {
+			tmp[a][b+1] = "#";
+			rightSeeker(game, tmp, X, ++Y);
+			return true;
+		}
+		
+		// 맨 처음 false가 아 재귀상황에서 false는 상관없음
+		return false;
+	}
+
+	private static boolean upSeeker(String[][] game, String[][] tmp, int a, int b) {
+		if(a-1 == -1) return false; // 재귀상태에서 맨 윗줄 
+		
+		// 윗칸과 값이 동일하면 #칠하고 또 윗칸 탐색
+		if(game[a][b].equals(game[a-1][b])) {
+			tmp[a-1][b] = "#";
+			upSeeker(game, tmp, --X, Y);
+			return true;
+		}
+		
+		// 맨 처음 false가 아 재귀상황에서 false는 상관없음
+		return false;
+	}
+
+	private static boolean leftSeeker(String[][] game, String[][] tmp, int a, int b) {
+		if(b-1 == -1) return false; // 재귀상태에서 맨 왼쪽 줄 
+		
+		// 왼쪽 칸과 값이 동일하면 #칠하고 또 왼쪽 칸 탐색
+		if(game[a][b].equals(game[a][b-1])) {
+			tmp[a][b-1] = "#";
+			leftSeeker(game, tmp, X, --Y);
+			return true;
+		}
+		
+		// 맨 처음 false가 아 재귀상황에서 false는 상관없음
+		return false;
+	}
+	
+	public static void printArr(String[][] arr) {
+		for(int i=0; i<M; i++) {
+			for(int j=0; j<N; j++) {
+				System.out.print(arr[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	
+	public static void init(String[][] tmp) {
+		for(int i=0; i<M; i++) {
+			for(int j=0; j<N; j++) {
+				tmp[i][j] = "1";
+			}
+		}
+	}
+}
