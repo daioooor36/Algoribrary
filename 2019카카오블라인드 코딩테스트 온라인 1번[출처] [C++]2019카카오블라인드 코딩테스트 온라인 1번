@@ -1,0 +1,139 @@
+import java.util.ArrayList;
+
+/*
+2019 문제 #01
+아이디/별명 저장할 별도공간 선언 [N][2]
+Log찍을 공간 선언
+*/
+
+public class Main
+{
+	private static String[] CASE = {"Enter uid1234 Muzi"
+		                            , "Enter uid4567 Prodo"
+		                            , "Leave uid1234"
+		                            , "Enter uid1234 Prodo"
+		                            , "Change uid4567 Ryan"};	
+	// private static String INPUT2 = "french";
+
+	public static void main(String[] args)
+	{
+		//Scanner scan = new Scanner(System.in);
+		//ArrayList<String> arr1 = new ArrayList<String>();
+		printArr(solution(CASE));
+	}
+	
+	public static String[] solution(String[] input)
+	{
+		int len = input.length;
+		int result_len = 0;
+		String[][] log = new String[len][3];
+		ArrayList<ArrayList<String>> alias = new ArrayList<>();
+		for(int i=0; i<len; i++)
+		{
+			log[i] = input[i].split(" ");
+			if(log[i][0].equals("Change")) result_len++;
+			//printArr(log[i]);
+			setName(log[i], alias);
+		}
+		
+		String[] result = new String[len-result_len];
+		for(int i=0, j=0; i<len; i++)
+		{
+			if(log[j][0].equals("Change"))
+				i++;
+			else
+			{
+				result[i] = getName(log[j][1], alias) + "님이 " + getAct(log[j][0]);
+				j++;
+			}
+		}
+				
+		//printArr(log);
+		return result;
+	}
+	
+	// 별칭 마스터
+	public static void setName(String[] log, ArrayList<ArrayList<String>> alias)
+	{
+		// Uid가 하나도 없을 때, 최초입력
+		if(alias.size() == 0)
+		{
+			alias.add( new ArrayList<String>() );
+			alias.get(0).add(log[1]);
+			alias.get(0).add(log[2]);
+		}
+		else if(log[0].equals("Enter") || log[0].equals("Change"))
+		{
+			boolean isChange = false;
+			int i=0;
+			for(i=0 ; i<alias.size(); i++)
+			{
+				if(log[1].equals(alias.get(i).get(0)))
+				{
+					// 일치하는 Uid이 있을경우, 별칭 변경
+					alias.get(i).set(1, log[2]);	
+					isChange = true;
+				}
+			}
+			
+			// 일치하는 Uid가 없을 경우, 최초입력
+			if(isChange == false)
+			{
+				alias.add( new ArrayList<String>() );
+				alias.get(i).add(log[1]);
+				alias.get(i).add(log[2]);
+			}
+		}
+	}
+	
+	// 별칭 마스터
+	public static String getName(String uid, ArrayList<ArrayList<String>> alias)
+	{		
+		for(int i=0 ; i<alias.size(); i++)
+		{
+			if(uid.equals(alias.get(i).get(0)))
+			{
+				// 일치하는 Uid이 있을경우, 별칭 반환
+				return alias.get(i).get(1);
+			}
+		}
+		
+		return "";
+	}
+	
+	// 별칭 마스터
+	public static String getAct(String act)
+	{		
+		if(act.equals("Enter"))
+			return "들어왔습니다.";
+		else if(act.equals("Leave"))
+			return "나갔습니다.";
+		else
+			return "";
+	}
+	
+	public static void printArr(String[] input)
+	{
+		int len = input.length;
+		for(int i=0 ; i<len; i++)
+		{
+			System.out.print(input[i] + " ");
+		}
+		System.out.println();
+	}
+	
+	public static void printArr(String[][] input)
+	{
+		int len = input.length;
+		for(int i=0 ; i<len; i++)
+		{
+			for(int j=0 ; j<input[i].length; j++)
+			{
+				System.out.print(input[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+
+}
