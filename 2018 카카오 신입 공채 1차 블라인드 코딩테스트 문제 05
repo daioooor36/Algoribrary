@@ -1,0 +1,145 @@
+/*
+str1, str2 문자열 길이 2~1000
+영문자만 유효, 나머지는 버린다.
+대소문자 구분 안한다. -> 모두 upper 하자
+
+출력은 0~1사이의 실수(출력값에 65536을 곱하고 정수만 출력한다)
+ */
+
+import java.util.ArrayList;
+
+public class Main {
+	// private static String INPUT1 = "FRANCE";
+	// private static String INPUT2 = "french";
+
+	// private static String INPUT1 = "handshake";
+	// private static String INPUT2 = "shake hands";
+
+	// private static String INPUT1 = "aa1+aa2";
+	// private static String INPUT2 = "AAAA12";
+
+	private static String INPUT1 = "E=M*C^2";
+	private static String INPUT2 = "e=m*c^2";
+
+	// 공집합처리하기
+	// 4번 입력예 처리하기
+	public static void main(String[] args) {
+		// Scanner scan = new Scanner(System.in);
+		String str1 = INPUT1.toUpperCase();
+		String str2 = INPUT2.toUpperCase();
+
+		ArrayList<String> arr1 = new ArrayList<String>();
+		ArrayList<String> arr2 = new ArrayList<String>();
+
+		String tmp = "";
+
+		// 집합으로 분할1
+		for (int i = 0; i < str1.length() - 1; i++) {
+			tmp = str1.substring(i, i + 2);
+			if (tmp.matches("[a-zA-Z]*")) {
+				arr1.add(tmp);
+				System.out.print(tmp + " / ");
+			}
+		}
+
+		System.out.println();
+
+		// 집합으로 분할2
+		for (int i = 0; i < str2.length() - 1; i++) {
+			tmp = str2.substring(i, i + 2);
+			if (tmp.matches("[a-zA-Z]*")) {
+				arr2.add(tmp);
+				System.out.print(tmp + " / ");
+			}
+		}
+
+		System.out.println();
+
+		int inter = 0, outer = 0;
+
+		// 교집합 서칭
+		/*
+		 * for(int i=0; i<arr1.size(); i++) { for(int j=0; j<arr2.size(); j++) {
+		 * if(arr1.get(i).equals(arr2.get(j))) { inter++; } } }
+		 */
+
+		// 교집합은
+		String buffer = "";
+		int cnt1, cnt2;
+
+		for (int i = 0; i < arr1.size(); i++) {
+			// 이전 검사항목과 같은 값이면 생략
+			if (buffer.equals(arr1.get(i)))
+				continue;
+			buffer = arr1.get(i);
+			cnt1 = 0;
+			cnt2 = 0;
+
+			for (int a = 0; a < arr1.size(); a++) {
+				if (arr1.get(a).equals(buffer))
+					cnt1++;
+			}
+
+			for (int b = 0; b < arr2.size(); b++) {
+				if (arr2.get(b).equals(buffer))
+					cnt2++;
+			}
+
+			if (cnt1 < cnt2)
+				inter += cnt1;
+			else
+				inter += cnt2;
+		}
+
+		// ////////////////////////////////////////////////
+
+		// 합집합은..?
+		buffer = "";
+
+		for (int i = 0; i < arr1.size(); i++) {
+			// 이전 검사항목과 같은 값이면 생략
+			if (buffer.equals(arr1.get(i)))
+				continue;
+			buffer = arr1.get(i);
+			cnt1 = 0;
+			cnt2 = 0;
+
+			for (int a = 0; a < arr1.size(); a++) {
+				if (arr1.get(a).equals(buffer))
+					cnt1++;
+			}
+
+			for (int b = 0; b < arr2.size(); b++) {
+				if (arr2.get(b).equals(buffer))
+					cnt2++;
+			}
+
+			if (cnt1 > cnt2)
+				outer += cnt1;
+			else
+				outer += cnt2;
+		}
+
+		buffer = "";
+		for (int i = 0; i < arr2.size(); i++) {
+			// 이전 검사항목과 같은 값이면 생략
+			if (buffer.equals(arr2.get(i)) || arr1.contains(arr2.get(i)))
+				continue;
+			buffer = arr2.get(i);
+			cnt2 = 0;
+
+			for (int b = 0; b < arr2.size(); b++) {
+				if (arr2.get(b).equals(buffer))
+					cnt2++;
+			}
+
+			outer += cnt2;
+		}
+
+		double result = (double) inter / outer * 65536.0;
+
+		System.out.println(inter + "/" + outer);
+		System.out.println(Math.floor(result));
+	}
+
+}
