@@ -1,0 +1,176 @@
+// Backjun #1012 유기농배추
+// https://www.acmicpc.net/problem/1012
+
+import java.util.Scanner;
+
+public class Main
+{
+	//private static int[] CASE = {5, 5};
+	//private static int [][]baechu;
+	//private static int[] dp, dp2;
+	//private static int N;
+	//private static String INPUT2 = "french";
+
+	public static void main(String[] args)
+	{
+		Scanner scan = new Scanner(System.in);
+		int T = scan.nextInt();
+		
+		for(int z=0; z<T; z++)
+		{
+			int M = scan.nextInt();
+			int N = scan.nextInt();
+			int K = scan.nextInt();
+			//System.out.println();
+			
+			int[][] baechu = new int[M][N];
+			for(int i=0; i<baechu.length; i++)
+			{
+				for(int j=0; j<baechu[i].length; j++)
+				{
+					baechu[i][j] = 0;
+				}
+			}
+			
+			int[] CASE = new int[K*2]; 
+			for(int i=0; i<K*2; i++)
+			{
+				CASE[i] = scan.nextInt();
+			}
+			
+			int i=0;
+			while(i<CASE.length)
+			{
+				baechu[CASE[i]][CASE[i+1]] = 1;
+				i+=2;
+			}
+			//printArr(baechu);
+			
+			int worms = solution(baechu);
+			
+			System.out.println(worms);
+		}
+	}
+	
+	public static void printArr(int[] baechu)
+	{
+		for(int i=0; i<baechu.length; i++)
+		{
+			System.out.print(baechu[i] + " ");
+		}
+		System.out.println();
+	}
+	
+	public static void printArr(int[][] baechu)
+	{
+		for(int i=0; i<baechu.length; i++)
+		{
+			for(int j=0; j<baechu[i].length; j++)
+			{
+				System.out.print(baechu[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	
+	/////////////////////////////////////////////////
+	
+	public static int solution(int[][] baechu)
+	{
+		int cnt = 0;
+		for(int i=0; i<baechu.length; i++)
+		{
+			for(int j=0; j<baechu[i].length; j++)
+			{
+				if(baechu[i][j] == 9 || baechu[i][j] == 0) // 이미 체크한 배추 or 배추없는 곳
+					continue;
+				else if(baechu[i][j] == 1)
+				{
+					cnt++;
+					baechu[i][j] = 9;
+					search(baechu, i, j);
+					//printArr(baechu);
+				}
+			}
+		}
+		
+		return cnt;
+	}
+	
+	public static void search(int[][] baechu, int x, int y)
+	{
+		searchUp(baechu, x, y-1);
+		searchLeft(baechu, x-1, y);
+		searchDown(baechu, x, y+1);
+		searchRight(baechu, x+1, y);
+	}
+	
+	public static void searchUp(int[][] baechu, int x, int y)
+	{
+		if(x>=baechu.length || y>=baechu[0].length || x<0 || y<0)
+			return;
+		
+		if(baechu[x][y] == 1)
+		{
+			baechu[x][y] = 9;
+			searchUp(baechu, x, y-1);
+			searchLeft(baechu, x-1, y);
+			searchDown(baechu, x, y+1);
+			searchRight(baechu, x+1, y);
+		}
+		else
+			return;
+	}
+	
+	public static void searchLeft(int[][] baechu, int x, int y)
+	{
+		if(x>=baechu.length || y>=baechu[0].length || x<0 || y<0)
+			return;
+		
+		if(baechu[x][y] == 1)
+		{
+			baechu[x][y] = 9;
+			searchUp(baechu, x, y-1);
+			searchLeft(baechu, x-1, y);
+			searchDown(baechu, x, y+1);
+			searchRight(baechu, x+1, y);
+		}
+		else
+			return;
+	}
+	
+	public static void searchDown(int[][] baechu, int x, int y)
+	{
+		if(x>=baechu.length || y>=baechu[0].length || x<0 || y<0)
+			return;
+		
+		if(baechu[x][y] == 1)
+		{
+			baechu[x][y] = 9;
+			searchUp(baechu, x, y-1);
+			searchLeft(baechu, x-1, y);
+			searchDown(baechu, x, y+1);
+			searchRight(baechu, x+1, y);
+		}
+		else
+			return;
+	}
+	
+	public static void searchRight(int[][] baechu, int x, int y)
+	{
+		if(x>=baechu.length || y>=baechu[0].length || x<0 || y<0)
+			return;
+		
+		if(baechu[x][y] == 1)
+		{
+			baechu[x][y] = 9;
+			searchUp(baechu, x, y-1);
+			searchLeft(baechu, x-1, y);
+			searchDown(baechu, x, y+1);
+			searchRight(baechu, x+1, y);
+		}
+		else
+			return;
+	}
+}
