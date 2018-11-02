@@ -1,0 +1,195 @@
+// Backjun #2667 단지번호붙이기 
+// https://www.acmicpc.net/problem/2667
+
+
+import java.util.Scanner; 
+
+
+public class Main 
+{ 
+	/*
+	private static String[] CASE = {"0110100",
+	                                  "0110101",
+	                                  "1110101",
+	                                  "0000111",
+	                                  "0100000",
+	                                  "0111110",
+	                                  "0111000"}; 
+	*/
+	//private static int [][]danji; 
+ 	//private static int[] dp, dp2; 
+ 	private static int Setting = 2;
+ 	private static int CNT = 0;
+ 	private static int [] Result = new int[600];
+ 	//private static String INPUT2 = "french"; 
+ 
+
+ 	public static void main(String[] args) 
+ 	{ 
+ 		Scanner scan = new Scanner(System.in); 
+ 		int N = scan.nextInt(); 
+ 		scan.nextLine();
+ 		
+ 		String []CASE = new String[N];
+ 		int[][] danji = new int[N][N]; 
+		for(int i=0; i<danji.length; i++) 
+		{
+			CASE[i] = scan.nextLine();
+			for(int j=0; j<danji[i].length; j++) 
+			{ 
+				danji[i][j] = Integer.parseInt(CASE[i].substring(j,j+1)); 
+			} 
+		}
+		//printArr(danji);
+		
+		solution(danji);
+		
+		//printArr(danji);
+
+		insertionSort(Result);
+
+		System.out.println(Setting-2);
+		for(int i=0 ; i<Setting-2; i++)
+		{
+			System.out.println(Result[i]);
+		}
+ 	} 
+ 	 
+ 	public static void printArr(int[] danji) 
+ 	{ 
+ 		for(int i=0; i<danji.length; i++) 
+ 		{ 
+ 			System.out.print(danji[i] + " "); 
+ 		} 
+ 		System.out.println(); 
+ 	} 
+ 	 
+ 	public static void printArr(int[][] danji) 
+ 	{ 
+ 		for(int i=0; i<danji.length; i++) 
+ 		{ 
+ 			for(int j=0; j<danji[i].length; j++) 
+ 			{ 
+ 				System.out.print(danji[i][j] + " "); 
+ 			} 
+ 			System.out.println(); 
+ 		} 
+ 		System.out.println(); 
+ 	}
+ 	
+ 	public static void insertionSort(int[] tmp)
+ 	{
+ 		for(int i=1; i<Setting-2; i++)
+ 		{
+ 			for(int j=0; j<i; j++)
+ 			{
+ 				if(tmp[i] < tmp[j])
+ 				{
+ 					int num = tmp[i];
+ 					tmp[i] = tmp[j];
+ 					tmp[j] = num;
+ 				}
+ 			}
+ 		}
+ 	}
+ 	 
+ 	///////////////////////////////////////////////// 
+ 	 
+ 	public static void solution(int[][] danji) 
+ 	{
+ 		for(int i=0; i<danji.length; i++) 
+ 		{
+ 			for(int j=0; j<danji[i].length; j++) 
+ 			{
+ 				if(danji[i][j] == 1) 
+ 				{
+ 					CNT = 1;
+ 					danji[i][j] = Setting;
+ 					search(danji, i, j); 
+ 					Result[Setting-2] = CNT;
+ 					Setting++;
+ 				} 
+ 			}
+ 		}
+ 	}
+  	 
+  	public static void search(int[][] danji, int x, int y) 
+  	{
+  		searchUp(danji, x, y-1);
+  		searchLeft(danji, x-1, y);
+  		searchDown(danji, x, y+1);
+  		searchRight(danji, x+1, y);
+  	}
+  	 
+  	public static void searchUp(int[][] danji, int x, int y) 
+  	{
+  		if(x>=danji.length || y>=danji[0].length || x<0 || y<0) 
+  			return;
+  		 
+  		if(danji[x][y] == 1)
+  		{ 
+  			CNT++;
+  			danji[x][y] = Setting; 
+  			searchUp(danji, x, y-1); 
+  			searchLeft(danji, x-1, y); 
+  			searchDown(danji, x, y+1); 
+  			searchRight(danji, x+1, y); 
+  		} 
+  		else 
+  			return; 
+  	} 
+  	 
+  	public static void searchLeft(int[][] danji, int x, int y) 
+  	{
+  		if(x>=danji.length || y>=danji[0].length || x<0 || y<0) 
+  			return; 
+  		 
+  		if(danji[x][y] == 1)
+  		{ 
+  			CNT++;
+  			danji[x][y] = Setting; 
+  			searchUp(danji, x, y-1); 
+  			searchLeft(danji, x-1, y); 
+  			searchDown(danji, x, y+1); 
+  			searchRight(danji, x+1, y);  			
+  		} 
+  		else 
+  			return; 
+  	} 
+  	 
+  	public static void searchDown(int[][] danji, int x, int y) 
+  	{
+  		if(x>=danji.length || y>=danji[0].length || x<0 || y<0) 
+  			return; 
+  		 
+  		if(danji[x][y] == 1)
+  		{ 
+  			CNT++;
+  			danji[x][y] = Setting; 
+  			searchUp(danji, x, y-1); 
+  			searchLeft(danji, x-1, y); 
+  			searchDown(danji, x, y+1); 
+  			searchRight(danji, x+1, y); 
+  		} 
+  		else 
+  			return; 
+  	} 
+  	 
+  	public static void searchRight(int[][] danji, int x, int y) 
+  	{
+  		if(x>=danji.length || y>=danji[0].length || x<0 || y<0) 
+  			return; 
+  		 
+  		if(danji[x][y] == 1)
+  		{ 
+  			CNT++;
+  			danji[x][y] = Setting; 
+  			searchUp(danji, x, y-1); 
+  			searchLeft(danji, x-1, y); 
+  			searchDown(danji, x, y+1); 
+  			searchRight(danji, x+1, y); 
+  		} 
+  		else 
+  			return; 
+  	} 
+  } 
