@@ -1,0 +1,597 @@
+// Backjun #13460 구슬 탈출2 (미해결)
+// https://www.acmicpc.net/problem/13460
+
+
+import java.util.Scanner; 
+
+public class Main 
+{
+	static int b1_x=0, b1_y=0;
+	static int b2_x=0, b2_y=0;
+	static int CNT = 0;
+	static int GOAL = 0;
+		
+ 	public static void main(String[] args)
+ 	{
+ 		Scanner scan = new Scanner(System.in);
+ 		int N = scan.nextInt();
+ 		int M = scan.nextInt();
+ 		scan.nextLine();
+ 		
+ 		String [][]CASE = new String[N][M];
+ 		String [][]DUP = new String[N][M];
+ 		
+		for(int i=0; i<N; i++)
+		{
+			String tmp = scan.nextLine();
+			for(int j=0; j<M; j++)
+			{
+				DUP[i][j] = CASE[i][j] = tmp.substring(j, j+1);
+			}
+		}
+		
+		//int tmp = solution(CASE);
+		//printArr(CASE);
+		solution(DUP);
+		int result = tilt(DUP);
+		System.out.print(result);
+ 	}
+ 	
+ 	/////////////////////////////////////////////////
+ 	
+ 	public static void solution(String [][]arr)
+ 	{
+ 		int chk = 0;
+ 		for(int i=0; i<arr.length; i++)
+ 		{
+ 			for(int j=0; j<arr[0].length; j++)
+ 			{
+ 				if(arr[i][j].equals("R"))
+ 				{
+ 					//빨간공 위치 확인
+ 					b1_x = i;
+ 					b1_y = j;
+ 					chk++;
+ 				}
+ 				else if(arr[i][j].equals("B"))
+ 				{
+ 					//파란공 위치 확인
+ 					b2_x = i;
+ 					b2_y = j;
+ 					chk++;
+ 				}
+ 				if(chk==2)
+ 					return; 				
+ 			}
+ 		}
+ 	}
+ 	
+ 	public static int tilt(String[][] arr)
+ 	{
+ 		while(CNT < 10)
+ 		{
+ 			tilt_Left(arr);
+ 			if(isEnd())
+ 				break;
+ 			
+	 		tilt_Down(arr);
+ 			if(isEnd())
+ 				break;
+
+	 		tilt_Right(arr);
+ 			if(isEnd())
+ 				break;
+
+	 		tilt_Up(arr);
+ 			if(isEnd())
+ 				break;
+ 		}
+ 		
+ 		if(GOAL==0)
+ 			return -1;
+ 		else
+ 			return GOAL;
+ 	}
+ 	
+ 	/* 재귀호출하도록 틸트함수 4개 변경하기 */
+ 	/* 좌일땐 상&하
+ 	 * 우일땐 상&하
+ 	 * 상일땐 좌&우
+ 	 * 하일땐 좌&우
+ 	 * 각 틸트별 cnt재귀로 세고
+ 	 * 리턴에 cnt하고 그걸 합산.
+ 	 * 끝까지갔을때 10회초과일때 return 0; 
+ 	 */
+ 	
+ 	public static boolean isEnd()
+ 	{
+ 		// 총 이동횟수 10회 이하
+ 		if(GOAL!=0 || CNT==10)
+ 			return true;
+ 		else
+ 			 return false; 			
+ 	} 	
+ 	
+ 	public static void tilt_Left(String[][] arr)
+ 	{
+ 		boolean RedCanGo  = isLeftBlank(arr, b1_x, b1_y);
+ 		boolean BlueCanGo = isLeftBlank(arr, b2_x, b2_y);
+ 		int cnt = 1;
+ 		
+ 		while(RedCanGo || BlueCanGo)
+ 		{
+ 			CNT += cnt;
+ 			cnt *= 0;
+ 			if(b1_x==b2_x && b1_y>b2_y) // 같은 가로선에 파란공이 더 왼쪽에 있을 때
+ 			{ 
+ 				// 파란공 먼저 왼쪽으로 간다
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_y -= 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+
+ 				RedCanGo = isLeftBlank(arr, b1_x, b1_y); // 뒷공은 앞공이 움직인 후에 다시 체크한다.
+ 				// 그 뒤에 빨간공이 왼쪽으로 간다
+ 				if(RedCanGo || arr[b1_x][b1_y-1].equals("O"))
+ 				{
+ 					if(arr[b1_x][b1_y-1].equals("O"))
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_y -= 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+ 			}
+ 			else if(b1_x==b2_x && b1_y<b2_y) // 같은 가로선에 빨간공이 더 왼쪽에 있을 때
+ 			{ 
+ 				// 빨간공 먼저 왼쪽으로 간다
+ 				if(RedCanGo || arr[b1_x][b1_y-1].equals("O"))
+ 				{
+ 					if(arr[b1_x][b1_y-1].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_y -= 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+
+ 				BlueCanGo = isLeftBlank(arr, b2_x, b2_y); // 뒷공은 앞공이 움직인 후에 다시 체크한다.
+ 				// 그 뒤에 파란공이 왼쪽으로 간다
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_y -= 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+ 			}
+ 			else // 같은 가로선에 있지않으면 상관없이 움직인다.
+ 			{
+ 				if(RedCanGo || arr[b1_x][b1_y-1].equals("O"))
+ 				{
+ 					if(arr[b1_x][b1_y-1].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_y -= 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+ 				
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_y -= 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+ 			}
+
+ 			RedCanGo  = isLeftBlank(arr, b1_x, b1_y);
+ 			BlueCanGo = isLeftBlank(arr, b2_x, b2_y);
+ 		}
+ 	}
+ 	
+ 	public static void tilt_Right(String[][] arr)
+ 	{
+ 		boolean RedCanGo  = isRightBlank(arr, b1_x, b1_y);
+ 		boolean BlueCanGo = isRightBlank(arr, b2_x, b2_y);
+ 		int cnt = 1;
+ 		
+ 		while(RedCanGo || BlueCanGo)
+ 		{
+ 			CNT += cnt;
+ 			cnt *= 0;
+ 			if(b1_x==b2_x && b1_y<b2_y) // 같은 가로선에 파란공이 더 오른쪽에 있을 때
+ 			{
+ 				// 파란공 먼저 오른쪽으로 간다
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_y += 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+
+ 				RedCanGo = isRightBlank(arr, b1_x, b1_y); // 뒷공은 앞공이 움직인 후에 다시 체크한다.
+ 				// 그 뒤에 빨간공이 오른쪽으로 간다
+ 				if(RedCanGo || arr[b1_x][b1_y+1].equals("O"))
+ 				{
+ 					if(arr[b1_x][b1_y+1].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_y += 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+ 			}
+ 			else if(b1_x==b2_x && b1_y>b2_y) // 같은 가로선에 빨간공이 더 오른쪽에 있을 때
+ 			{
+ 				// 빨간공 먼저 오른쪽으로 간다
+ 				if(RedCanGo || arr[b1_x][b1_y+1].equals("O"))
+ 				{
+ 					if(arr[b1_x][b1_y+1].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_y += 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+
+ 				BlueCanGo = isRightBlank(arr, b2_x, b2_y); // 뒷공은 앞공이 움직인 후에 다시 체크한다.
+ 				// 그 뒤에 파란공이 오른쪽으로 간다
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_y += 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+ 			}
+ 			else // 같은 가로선에 있지않으면 상관없이 움직인다.
+ 			{
+ 				if(RedCanGo || arr[b1_x][b1_y+1].equals("O"))
+ 				{
+ 					if(arr[b1_x][b1_y+1].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_y += 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+ 				
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_y += 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+ 			}
+
+ 			RedCanGo  = isRightBlank(arr, b1_x, b1_y);
+ 			BlueCanGo = isRightBlank(arr, b2_x, b2_y);
+ 		}
+ 	}
+ 	
+ 	public static void tilt_Down(String[][] arr)
+ 	{
+ 		boolean RedCanGo  = isDownBlank(arr, b1_x, b1_y);
+ 		boolean BlueCanGo = isDownBlank(arr, b2_x, b2_y);
+ 		int cnt = 1;
+ 		
+ 		while(RedCanGo || BlueCanGo)
+ 		{
+ 			CNT += cnt;
+ 			cnt *= 0;
+ 			if(b1_x<b2_x && b1_y==b2_y) // 동일 세로선에 파란공이 더 아래쪽에 있을 때
+ 			{ 
+ 				// 파란공 먼저 아래쪽으로 간다
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_x += 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+
+ 				RedCanGo = isDownBlank(arr, b1_x, b1_y); // 윗공은 아랫공이 움직인 후에 다시 체크한다.
+ 				// 그 뒤에 빨간공이 아래쪽으로 간다
+ 				if(RedCanGo || arr[b1_x+1][b1_y].equals("O"))
+ 				{
+ 					if(arr[b1_x+1][b1_y].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_x += 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+ 			}
+ 			else if(b1_x>b2_x && b1_y==b2_y) // 동일 세로선에 빨간공이 더 아래쪽에 있을 때
+ 			{ 
+ 				// 빨간공 먼저 아래쪽으로 간다
+ 				if(RedCanGo || arr[b1_x+1][b1_y].equals("O"))
+ 				{
+ 					if(arr[b1_x+1][b1_y].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_x += 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+
+ 				BlueCanGo = isDownBlank(arr, b2_x, b2_y); // 윗공은 아랫공이 움직인 후에 다시 체크한다.
+ 				// 그 뒤에 파란공이 아래쪽으로 간다
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_x += 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+ 			}
+ 			else // 동일 세로선에 있지않으면 상관없이 움직인다.
+ 			{
+ 				if(RedCanGo || arr[b1_x+1][b1_y].equals("O"))
+ 				{
+ 					if(arr[b1_x+1][b1_y].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_x += 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+ 				
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_x += 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+ 			}
+
+ 			RedCanGo  = isDownBlank(arr, b1_x, b1_y);
+ 			BlueCanGo = isDownBlank(arr, b2_x, b2_y);
+ 			
+
+			//System.out.println("Down빨간공:("+b1_x+","+b1_y+")"+RedCanGo);
+			//System.out.println("Down파란공:("+b2_x+","+b2_y+")"+BlueCanGo);
+ 		}
+ 	}
+ 	
+ 	public static void tilt_Up(String[][] arr)
+ 	{
+ 		boolean RedCanGo  = isUpBlank(arr, b1_x, b1_y);
+ 		boolean BlueCanGo = isUpBlank(arr, b2_x, b2_y);
+ 		int cnt = 1;
+ 		
+ 		while(RedCanGo || BlueCanGo)
+ 		{
+ 			CNT += cnt;
+ 			cnt *= 0;
+ 			if(b1_x>b2_x && b1_y==b2_y) // 동일 세로선에 파란공이 더 위쪽에 있을 때
+ 			{ 
+ 				// 파란공 먼저 위쪽으로 간다
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_x -= 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+
+ 				RedCanGo = isUpBlank(arr, b1_x, b1_y); // 아랫공은 윗공이 움직인 후에 다시 체크한다.
+ 				// 그 뒤에 빨간공이 위쪽으로 간다
+ 				if(RedCanGo || arr[b1_x-1][b1_y].equals("O"))
+ 				{
+ 					if(arr[b1_x-1][b1_y].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_x -= 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+ 			}
+ 			else if(b1_x<b2_x && b1_y==b2_y) // 동일 세로선에 빨간공이 더 위쪽에 있을 때
+ 			{ 
+ 				// 빨간공 먼저 위쪽으로 간다
+ 				if(RedCanGo || arr[b1_x-1][b1_y].equals("O"))
+ 				{
+ 					if(arr[b1_x-1][b1_y].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_x -= 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+
+ 				BlueCanGo = isUpBlank(arr, b2_x, b2_y); // 아랫공은 윗공이 움직인 후에 다시 체크한다.
+ 				// 그 뒤에 파란공이 위쪽으로 간다
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_x -= 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+ 			}
+ 			else // 동일 세로선에 있지않으면 상관없이 움직인다.
+ 			{
+ 				if(RedCanGo || arr[b1_x-1][b1_y].equals("O"))
+ 				{
+ 					if(arr[b1_x-1][b1_y].equals("O")) // 탈출하면 끝.
+ 					{
+ 						GOAL = CNT;
+ 						return;
+ 					}
+ 					else
+ 	 				{
+ 	 					arr[b1_x][b1_y] = ".";
+ 	 					b1_x -= 1;
+ 	 					arr[b1_x][b1_y] = "R";
+ 	 				}
+ 				}
+ 				
+ 				if(BlueCanGo)
+ 				{
+ 					arr[b2_x][b2_y] = ".";
+ 					b2_x -= 1;
+ 					arr[b2_x][b2_y] = "B";
+ 				}
+ 			}
+
+ 			RedCanGo  = isUpBlank(arr, b1_x, b1_y);
+ 			BlueCanGo = isUpBlank(arr, b2_x, b2_y);
+ 			
+
+			//System.out.println("Up빨간공:("+b1_x+","+b1_y+")"+RedCanGo);
+			//System.out.println("Up파란공:("+b2_x+","+b2_y+")"+BlueCanGo);
+ 		}
+ 	}
+ 	
+ 	////////////////////////
+ 	 	
+ 	public static boolean isLeftBlank(String[][] arr, int x, int y)
+ 	{
+ 		if(x==b1_x && y==b1_y && arr[x][y-1].equals("O"))
+ 			return true;
+ 		else if(arr[x][y-1].equals("."))
+ 			return true;
+ 		else
+ 			return false;
+ 	}
+ 	
+ 	public static boolean isRightBlank(String[][] arr, int x, int y)
+ 	{
+ 		if(x==b1_x && y==b1_y && arr[x][y+1].equals("O"))
+ 			return true;
+ 		else if(arr[x][y+1].equals("."))
+ 			return true;
+ 		else
+ 			return false;
+ 	}
+ 	
+ 	public static boolean isDownBlank(String[][] arr, int x, int y)
+ 	{
+ 		if(x==b1_x && y==b1_y && arr[x+1][y].equals("O"))
+ 			return true;
+ 		else if(arr[x+1][y].equals("."))
+ 			return true;
+ 		else
+ 			return false;
+ 	}
+ 	
+ 	public static boolean isUpBlank(String[][] arr, int x, int y)
+ 	{
+ 		if(x==b1_x && y==b1_y && arr[x-1][y].equals("O"))
+ 			return true;
+ 		else if(arr[x-1][y].equals("."))
+ 			return true;
+ 		else
+ 			return false;
+ 	}
+ 	
+ 	/////////////////////////////////////////////////
+ 	
+ 	public static void printArr(int[][] arr)
+ 	{
+ 		for(int i=0; i<arr.length; i++)
+ 		{
+ 			for(int j=0; j<arr[0].length; j++)
+ 			{
+ 				System.out.print(arr[i][j]); 				
+ 			}
+ 			System.out.println();
+ 		}
+ 	}
+ 	
+ 	public static void printArr(String[][] arr)
+ 	{
+ 		for(int i=0; i<arr.length; i++)
+ 		{
+ 			for(int j=0; j<arr[0].length; j++)
+ 			{
+ 				System.out.print(arr[i][j]); 				
+ 			}
+ 			System.out.println();
+ 		}
+ 	}
+ 	
+ 	public static int max(int a, int b)
+ 	{
+ 		if(a<=b)
+ 			return b;
+ 		else
+ 			return a;
+ 	}
+ 	
+ 	public static int maxArr(int[][] arr)
+ 	{
+ 		int max = 0;
+ 		for(int i=0; i<arr.length; i++)
+ 		{
+ 			for(int j=0; j<arr[0].length; j++)
+ 			{
+ 				if(max<arr[i][j])
+ 					max = arr[i][j];
+ 			}
+ 		}
+ 		
+ 		return max;
+ 	}
+ 	
+ 	public static int min(int a, int b)
+ 	{
+ 		if(a>b)
+ 			return b;
+ 		else
+ 			return a;
+ 	}
+}
